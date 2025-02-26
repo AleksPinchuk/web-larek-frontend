@@ -1,28 +1,44 @@
-import { IEvents } from "../base/events";
+import {Component} from "../base/Component";
+import {ensureElement} from "../../utils/utils";
+import {IEvents} from "../base/events";
 
-// Гарда для проверки на модель
-export const isModel = <T>(obj: unknown): obj is Model<T> => {
-    return obj instanceof Model;
+interface IModalData {
+    content: HTMLElement;
 }
 
-/**
- * Базовая модель для всех объектов с данными
- */
-export abstract class Model<T> {
-    // Конструктор принимает частичные данные и обработчик событий
-    constructor(data: Partial<T>, protected events: IEvents) {
-        Object.assign(this, data);
+export class Modal extends Component<IModalData> {
+    protected _closeButton: HTMLButtonElement;
+    protected _content: HTMLElement;
+
+    constructor(container: HTMLElement, protected events: IEvents) {
+        super(container);
+
+        this._closeButton = ensureElement<HTMLButtonElement>('.modal__close', container);
+        this._content = ensureElement<HTMLElement>('.modal__content', container);
+
+        this._closeButton.addEventListener('click', this.close.bind(this));
+        this.container.addEventListener('click', this.close.bind(this));
+        this._content.addEventListener('click', (event) => event.stopPropagation());
     }
 
-    /**
-     * Сообщить всем об изменении модели
-     * @param event Название события
-     * @param payload Дополнительные данные для события
-     */
-    emitChanges(event: string, payload?: object) {
-        // Используется оператор nullish coalescing для подставления пустого объекта по умолчанию
-        this.events.emit(event, payload ?? {});
+    set content(value: HTMLElement) {
+        this._content.replaceChildren(value);
     }
 
-    // Здесь могут быть добавлены общие методы для моделей
+    open() {
+        this.container.classList.add('modal_active');
+        this.events.emit('modal:open');
+    }
+
+    close() {
+        this.container.classList.remove('modal_active');
+        this.content = null;
+        this.events.emit('modal:close');
+    }
+
+    render(data: IModalData): HTMLElement {
+        super.render(data);
+        this.open();
+        return this.container;
+    }
 }
