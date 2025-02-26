@@ -1,36 +1,15 @@
-# Проектная работа "Веб-ларек"
+# Проектная работа Веб-ларек
 
-Стек: HTML, SCSS, TS, Webpack
+Фронтенд-проект, реализованный с использованием **HTML, SCSS, TypeScript и Webpack**. Использует архитектурный паттерн **MVP** (Model-View-Presenter).
 
-Структура проекта:
-- src/ — исходные файлы проекта
-- src/components/ — папка с JS компонентами
-- src/components/base/ — папка с базовым кодом
+## 🚀 Стек технологий
+- **HTML** – разметка
+- **SCSS** – стили
+- **TypeScript** – логика
+- **Webpack** – сборка
 
-Важные файлы:
-- src/pages/index.html — HTML-файл главной страницы
-- src/types/index.ts — файл с типами
-- src/index.ts — точка входа приложения
-- src/scss/styles.scss — корневой файл стилей
-- src/utils/constants.ts — файл с константами
-- src/utils/utils.ts — файл с утилитами
-
-Веб-ларек
-
-Фронтенд-проект, реализованный с использованием HTML, SCSS, TypeScript и Webpack. Использует архитектурный паттерн MVP (Model-View-Presenter).
-
-🚀 Стек технологий
-
-HTML – разметка
-
-SCSS – стили
-
-TypeScript – логика
-
-Webpack – сборка
-
-📂 Структура проекта
-
+## 📂 Структура проекта
+```
 ├── src/          # Исходники
 │   ├── components/  # Компоненты
 │   ├── models/      # Модели
@@ -41,28 +20,27 @@ Webpack – сборка
 │   ├── styles/      # Стили
 ├── public/       # Статика
 ├── dist/         # Сборка
+```
 
-⚡ Установка и запуск
-
+## ⚡ Установка и запуск
+```sh
 npm install
 npm run start
+```
 
-🔨 Сборка проекта
-
+### 🔨 Сборка проекта
+```sh
 npm run build
+```
 
-🎭 Архитектурный шаблон MVP
-
+## 🎭 Архитектурный шаблон MVP
 Разделяет приложение на три слоя:
+- **Model** – данные и бизнес-логика
+- **View** – интерфейс
+- **Presenter** – связь Model и View
 
-Model – данные и бизнес-логика
-
-View – интерфейс
-
-Presenter – связь Model и View
-
-🔑 Интерфейсы
-
+## 🔑 Интерфейсы
+```ts
 interface IProductItem {
   id: string;
   description: string;
@@ -71,12 +49,14 @@ interface IProductItem {
   category: string;
   price: number;
 }
-
+```
+```ts
 interface IOrderResult {
   id: string;
   total: number;
 }
-
+```
+```ts
 interface IAppState {
   catalog: IProductItem[];
   basket: string[];
@@ -85,23 +65,18 @@ interface IAppState {
   delivery: IDeliveryForm | null;
   order: IOrder | null;
 }
+```
 
-📌 Основные классы
+## 📌 Основные классы
+- `Model` – управление данными
+- `Component` – работа с DOM
+- `Basket` – управление корзиной
+- `Form` – обработка форм
+- `Modal` – модальные окна
+- `Page` – управление контентом
+- `API` – работа с сервером
 
-Model – управление данными
+## 📬 Контакты
+Разработчик: [Александр](https://github.com/AleksPinchuk)  
+Проект на GitHub: [web-larek-frontend](https://github.com/AleksPinchuk/web-larek-frontend)
 
-Component – работа с DOM
-
-Basket – управление корзиной
-
-Form – обработка форм
-
-Modal – модальные окна
-
-Page – управление контентом
-
-API – работа с сервером
-
-📬 Контакты
-
-Разработчик: АлександрПроект на GitHub: web-larek-frontend
