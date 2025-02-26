@@ -7,7 +7,7 @@ interface ISuccess {
 }
 
 interface ISuccessActions {
-	onClick: (event: MouseEvent) => void;
+	onClick: (event: MouseEvent) => void
 }
 
 export class Success extends Component<ISuccess> {
@@ -20,16 +20,12 @@ export class Success extends Component<ISuccess> {
 		this._total = ensureElement<HTMLElement>('.order-success__description', this.container);
 		this._closeBtn = ensureElement<HTMLButtonElement>('.order-success__close', this.container);
 
-		if (actions?.onClick) {
-			this._closeBtn.addEventListener('click', actions.onClick.bind(this));
+		if(actions?.onClick) {
+			this._closeBtn.addEventListener('click', actions.onClick)
 		}
 	}
 
 	set total(value: number) {
-		if (value < 0) {
-			console.warn('Ошибка: сумма не может быть отрицательной');
-			return;
-		}
 		this.setText(this._total, `Списано ${value} синапсов`);
 	}
 }
