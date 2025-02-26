@@ -204,5 +204,5 @@ events.on('modal:close', () => {
 larekApi.getAllProducts()
 	.then(appData.setCatalog.bind(appData))
 	.catch(err => {
-		console.error(err); // Логирование ошибок
+		console.error(err);
 	});
