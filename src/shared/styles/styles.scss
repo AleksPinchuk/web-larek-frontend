@@ -1,0 +1,21 @@
+@use "fonts/vendor/normalize.css";
+@use "fonts/vendor/ys-text";
+@use "fonts/vendor/garamond";
+@use "fonts/vendor/glyphter";
+
+@use "button";
+@use "header";
+@use "gallery";
+@use "order";
+@use "order-success";
+
+@use "src/shared/ui/Form/form";
+@use "src/shared/ui/Modal/modal";
+
+@use "src/pages/Catalog/Catalog";
+@use "src/pages/Catalog/ui/ProductCard/ProductCard";
+
+@use "src/widgets/Basket/basket";
+
+@use "variables" as *;
+@use "mixins/index";

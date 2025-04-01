@@ -1,0 +1,18 @@
+@use "src/shared/styles/variables" as *;
+@use "src/shared/styles/mixins";
+
+html, body.page {
+	height: 100%;
+	font-family: $font;
+	font-size: $baseFontSize;
+	color: $baseFontColor;
+	background: $background;
+}
+
+.page__wrapper {
+	width: 100%;
+
+	&_locked {
+		position: fixed;
+	}
+}

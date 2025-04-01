@@ -1,14 +1,19 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const { DefinePlugin } = require('webpack');
+const { DefinePlugin } = require("webpack");
 const TerserPlugin = require("terser-webpack-plugin");
-
-require('dotenv').config({
-  path: path.join(process.cwd(), process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env')
+require("dotenv").config({
+  path: path.join(
+    process.cwd(),
+    process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : ".env"
+  ),
 });
+/* eslint-enable @typescript-eslint/no-var-requires */
+
 
 const isProduction = process.env.NODE_ENV == "production";
 
@@ -18,17 +23,17 @@ const config = {
   entry: "./src/index.ts",
   devtool: "source-map",
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "public"),
   },
   devServer: {
     open: true,
     host: "localhost",
-    watchFiles: ["src/pages/*.html"],
+    watchFiles: ["*.html"],
     hot: true
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "src/pages/index.html"
+      template: "index.html"
     }),
 
     new MiniCssExtractPlugin(),

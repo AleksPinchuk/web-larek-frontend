@@ -1,38 +1,48 @@
-// Интерфейс товара
-interface IProductItem {
-  id: string;
-  description: string;
-  image: string;
-  title: string;
-  category: string;
-  price: number | null;
+type ClickHandler = (event: MouseEvent) => void;
+
+interface IActionHandlers {
+	handleClick: ClickHandler;
 }
 
-// Определяем доступные способы оплаты
-type PaymentType = 'online' | 'on delivery';
-
-// Форма заказа (без суммы и списка товаров)
-interface IOrderForm {
-  payment: PaymentType;
-  address: string;
-  email: string;
-  phone: string;
+export interface IProduct {
+	id: string;
+	description: string;
+	imageUrl: string;
+	name: string;
+	category: string;
+	cost: number;
+	isInBasket: boolean;
+	basketPosition: number;
 }
 
-// Полный заказ (добавляем товары и сумму)
-interface IOrder extends IOrderForm {
-  items: IProductItem[]; // Список товаров
-  total: number; // Итоговая сумма
+export interface IPaymentDetails {
+	paymentMethod: string;
+	deliveryAddress: string;
 }
 
-// Корзина покупателя
-interface IBasket {
-  items: IProductItem[]; // Список товаров в корзине
-  total: number; // Итоговая стоимость корзины
+export interface IContactInfo {
+	email: string;
+	phoneNumber: string;
 }
 
-// Результат оформления заказа
-interface IOrderResult {
-  id: string; // Уникальный ID заказа
-  total: number; // Итоговая сумма заказа
+export interface IOrderDetails extends IPaymentDetails, IContactInfo {
+  errors?: string[]; // Добавляем поле для ошибок
+}
+
+export interface IOrder extends IOrderDetails {
+	productIds: string[];
+	totalCost: number;
+}
+
+export interface IOrderResponse {
+	response: { orderId: string; totalCost: number } | { errorMessage: string };
+}
+
+export type IFormValidationErrors = Record<string, string>;
+
+export interface IApplicationState {
+	productList: IProduct[];
+	shoppingCart: IProduct[];
+	currentOrder: IOrder | null;
+	validationErrors: IFormValidationErrors;
 }
