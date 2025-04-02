@@ -1,48 +1,40 @@
-type ClickHandler = (event: MouseEvent) => void;
-
-interface IActionHandlers {
-	handleClick: ClickHandler;
-}
-
-export interface IProduct {
+export interface IProductItem {
 	id: string;
 	description: string;
-	imageUrl: string;
-	name: string;
+	image: string;
+	title: string;
 	category: string;
-	cost: number;
-	isInBasket: boolean;
-	basketPosition: number;
+	price: number;
+	inBasket: boolean;
+	basketIndex: number;
 }
 
-export interface IPaymentDetails {
-	paymentMethod: string;
-	deliveryAddress: string;
+export interface IOrderAddress {
+	payment: string;
+	address: string;
 }
 
-export interface IContactInfo {
+export interface IOrderContacts {
 	email: string;
-	phoneNumber: string;
+	phone: string;
 }
 
-export interface IOrderDetails extends IPaymentDetails, IContactInfo {
-  errors?: string[]; // Добавляем поле для ошибок
+export interface IOrderForm extends IOrderAddress, IOrderContacts {}
+
+export interface IOrder extends IOrderForm {
+	items: string[];
+	total: number;
 }
 
-export interface IOrder extends IOrderDetails {
-	productIds: string[];
-	totalCost: number;
+export interface IOrderResult {
+	result: { id: string; total: number } | { error: string };
 }
 
-export interface IOrderResponse {
-	response: { orderId: string; totalCost: number } | { errorMessage: string };
-}
+export type FormErrors = Partial<Record<keyof IOrder, string>>;
 
-export type IFormValidationErrors = Record<string, string>;
-
-export interface IApplicationState {
-	productList: IProduct[];
-	shoppingCart: IProduct[];
-	currentOrder: IOrder | null;
-	validationErrors: IFormValidationErrors;
+export interface IAppState {
+	catalog: IProductItem[];
+	basket: IProductItem[];
+	order: IOrder | null;
+	formErrors: FormErrors;
 }

@@ -1,115 +1,109 @@
 import { Component } from '../../../../shared/ui/Component/Component';
-import { IProduct } from '../../../../types';
+import { IProductItem } from '../../../../types';
 import { ensureElement } from '../../../../shared/utils/utils';
 
 interface ICardActions {
-    onClick: (event: MouseEvent) => void;
+	onClick: (event: MouseEvent) => void;
 }
 
-type CategoryColors = {
-    [key: string]: string;
+type categoryTypes = {
+	[key: string]: string;
 };
 
-const CATEGORY_COLOR_MAP: CategoryColors = {
-    'софт-скил': 'soft',
-    'хард-скил': 'hard',
-    'другое': 'other',
-    'дополнительное': 'additional',
-    'кнопка': 'button',
+const categoryTypesColors: categoryTypes = {
+	'софт-скил': 'soft',
+	'хард-скил': 'hard',
+	другое: 'other',
+	дополнительное: 'additional',
+	кнопка: 'button',
 };
 
-export class ProductCard extends Component<IProduct> {
-    private _title: HTMLElement;
-    private _price: HTMLElement;
-    private _description?: HTMLElement;
-    private _category?: HTMLElement;
-    private _image?: HTMLImageElement;
-    private _button?: HTMLButtonElement;
-    private _basketIndex?: HTMLElement;
+export class ProductCard extends Component<IProductItem> {
+	protected _title: HTMLElement;
+	protected _price: HTMLElement;
+	protected _description?: HTMLElement;
+	protected _category?: HTMLElement;
+	protected _image?: HTMLImageElement;
+	protected _button?: HTMLButtonElement;
+	protected _basketIndex?: HTMLElement;
 
-    constructor(
-        container: HTMLElement, 
-        protected blockName: string, 
-        actions?: ICardActions, 
-        inBasket?: boolean
-    ) {
-        super(container);
-        this._initializeElements(container);
-        this._initializeActions(actions, inBasket);
-    }
+	constructor(
+		protected blockName: string,
+		container: HTMLElement,
+		actions?: ICardActions,
+		inBasket?: boolean
+	) {
+		super(container);
+		this._title = ensureElement<HTMLElement>(`.${blockName}__title`, container);
+		this._price = ensureElement<HTMLElement>(`.${blockName}__price`, container);
+		this._category = container.querySelector(`.${blockName}__category`);
+		this._description = container.querySelector(`.${blockName}__text`);
+		this._image = container.querySelector(`.${blockName}__image`);
+		this._button = container.querySelector(`.${blockName}__button`);
+		this._basketIndex = container.querySelector(`.basket__item-index`);
 
-    private _initializeElements(container: HTMLElement) {
-        this._title = ensureElement<HTMLElement>(`.${this.blockName}__title`, container);
-        this._price = ensureElement<HTMLElement>(`.${this.blockName}__price`, container);
-        this._category = container.querySelector(`.${this.blockName}__category`);
-        this._description = container.querySelector(`.${this.blockName}__text`);
-        this._image = container.querySelector(`.${this.blockName}__image`);
-        this._button = container.querySelector(`.${this.blockName}__button`);
-        this._basketIndex = container.querySelector(`.basket__item-index`);
-    }
+		if (inBasket) {
+			this.setDisabled(this._button, true);
+		}
 
-    private _initializeActions(actions?: ICardActions, inBasket?: boolean) {
-        if (inBasket) {
-            this.setDisabled(this._button, true);
-        }
+		if (actions?.onClick) {
+			if (this._button) {
+				this._button.addEventListener('click', actions.onClick);
+			} else {
+				container.addEventListener('click', actions.onClick);
+			}
+		}
+	}
 
-        if (actions?.onClick) {
-            this._addClickListener(actions.onClick);
-        }
-    }
+	set title(value: string) {
+		this.setText(this._title, value);
+	}
 
-    private _addClickListener(onClick: (event: MouseEvent) => void) {
-        if (this._button) {
-            this._button.addEventListener('click', onClick);
-        } else {
-            this.container.addEventListener('click', onClick);
-        }
-    }
+	get title(): string {
+		return this._title.textContent || '';
+	}
 
-    set title(value: string) {
-        this.setText(this._title, value);
-    }
+	set price(value: number) {
+		this.setText(
+			this._price,
+			value !== null ? `${value} синапсов` : 'Бесценно'
+		);
 
-    get title(): string {
-        return this._title.textContent || '';
-    }
+		if (value === null) {
+			this.setDisabled(this._button, true);
+		}
+	}
 
-    set price(value: number) {
-        this.setText(this._price, value !== null ? `${value} синапсов` : 'Бесценно');
-    }
+	set category(value: string) {
+		this.setText(this._category, value);
+		this._category.classList.add(
+			`card__category_${categoryTypesColors[value]}`
+		);
+	}
 
-    set category(value: string) {
-        this.setText(this._category, value);
-        this._category.classList.add(`card__category_${CATEGORY_COLOR_MAP[value]}`);
-    }
+	set buttonText(value: string) {
+		this.setText(this._button, value);
+	}
 
-    set buttonText(value: string) {
-        this.setText(this._button, value);
-    }
+	set image(value: string) {
+		this.setImage(this._image, value, this.title);
+	}
 
-    set image(value: string) {
-        this.setImage(this._image, value, this.title);
-    }
+	set description(value: string[] | string) {
+		if (Array.isArray(value)) {
+			this._description.replaceWith(
+				...value.map((str) => {
+					const descTemplate = this._description.cloneNode() as HTMLElement;
+					this.setText(descTemplate, str);
+					return descTemplate;
+				})
+			);
+		} else {
+			this.setText(this._description, value);
+		}
+	}
 
-    set description(value: string[] | string) {
-        if (Array.isArray(value)) {
-            this._replaceDescriptionWithArray(value);
-        } else {
-            this.setText(this._description, value);
-        }
-    }
-
-    private _replaceDescriptionWithArray(values: string[]) {
-        this._description.replaceWith(...values.map(str => {
-            const descTemplate = this._description.cloneNode() as HTMLElement;
-            this.setText(descTemplate, str);
-            return descTemplate;
-        }));
-    }
-
-    set basketIndex(value: number) {
-        this.setText(this._basketIndex, String(value));
-    }
+	set basketIndex(value: number) {
+		this.setText(this._basketIndex, value);
+	}
 }
-
-

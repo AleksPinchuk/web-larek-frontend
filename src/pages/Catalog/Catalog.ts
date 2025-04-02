@@ -1,60 +1,46 @@
-import { Component } from "../../shared/ui/Component/Component";
-import { IEvents } from "../../shared/utils/events";
-import { ensureElement } from "../../shared";
+import {Component} from "../../shared/ui/Component/Component";
+import {IEvents} from "../../shared/utils/events";
+import {ensureElement} from "../../shared";
 
-export interface ICatalogState {
-    itemCount: number;
-    itemsList: HTMLElement[];
-    isDisabled: boolean;
+interface IPage {
+    counter: number;
+    catalog: HTMLElement[];
+    locked: boolean;
 }
 
-export class Catalog extends Component<ICatalogState> {
-    private _itemCountDisplay: HTMLElement;
-    private _galleryContainer: HTMLElement;
-    private _pageWrapper: HTMLElement;
-    private _cartButton: HTMLElement;
+export class Catalog extends Component<IPage> {
+    protected _counter: HTMLElement;
+    protected _catalog: HTMLElement;
+    protected _wrapper: HTMLElement;
+    protected _basket: HTMLElement;
 
-    constructor(root: HTMLElement, private eventManager: IEvents) {
-        super(root);
 
-        this._itemCountDisplay = ensureElement<HTMLElement>('.header__basket-counter');
-        this._galleryContainer = ensureElement<HTMLElement>('.gallery');
-        this._pageWrapper = ensureElement<HTMLElement>('.page__wrapper');
-        this._cartButton = ensureElement<HTMLElement>('.header__basket');
+    constructor(container: HTMLElement, protected events: IEvents) {
+        super(container);
 
-        this._setupCartInteraction();
-    }
+        this._counter = ensureElement<HTMLElement>('.header__basket-counter');
+        this._catalog = ensureElement<HTMLElement>('.gallery');
+        this._wrapper = ensureElement<HTMLElement>('.page__wrapper');
+        this._basket = ensureElement<HTMLElement>('.header__basket');
 
-    private _setupCartInteraction() {
-        this._cartButton.addEventListener('click', () => {
-            this.eventManager.emit('cart:toggle');
+        this._basket.addEventListener('click', () => {
+            this.events.emit('basket:open');
         });
     }
 
-    set itemCount(value: number) {
-        this._updateTextContent(this._itemCountDisplay, String(value));
+    set counter(value: number) {
+        this.setText(this._counter, String(value));
     }
 
-    set itemsList(elements: HTMLElement[]) {
-        this._populateGallery(elements);
+    set catalog(items: HTMLElement[]) {
+        this._catalog.replaceChildren(...items);
     }
 
-    set isDisabled(state: boolean) {
-        this._toggleOverlay(state);
-    }
-
-    private _updateTextContent(element: HTMLElement, text: string) {
-        element.textContent = text;
-    }
-
-    private _populateGallery(elements: HTMLElement[]) {
-        this._galleryContainer.innerHTML = '';
-        elements.forEach(element => this._galleryContainer.appendChild(element));
-    }
-
-    private _toggleOverlay(state: boolean) {
-        this._pageWrapper.classList.toggle('page__overlay_active', state);
+    set locked(value: boolean) {
+        if (value) {
+            this._wrapper.classList.add('page__wrapper_locked');
+        } else {
+            this._wrapper.classList.remove('page__wrapper_locked');
+        }
     }
 }
-
-

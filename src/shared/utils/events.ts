@@ -1,23 +1,16 @@
-// Хорошая практика даже простые типы выносить в алиасы
-// Зато когда захотите поменять это достаточно сделать в одном месте
 type EventName = string | RegExp;
-type Subscriber = Function;
+type Subscriber<T = unknown> = (data: T) => void; // Теперь принимает параметр
 type EmitterEvent = {
     eventName: string,
     data: unknown
 };
 
 export interface IEvents {
-    on<T extends object>(event: EventName, callback: (data: T) => void): void;
+    on<T extends object>(event: EventName, callback: Subscriber<T>): void;
     emit<T extends object>(event: string, data?: T): void;
-    trigger<T extends object>(event: string, context?: Partial<T>): (data: T) => void;
+    trigger<T extends object>(event: string, context?: Partial<T>): Subscriber<T>;
 }
 
-/**
- * Брокер событий, классическая реализация
- * В расширенных вариантах есть возможность подписаться на все события
- * или слушать события по шаблону например
- */
 export class EventEmitter implements IEvents {
     _events: Map<EventName, Set<Subscriber>>;
 
@@ -25,31 +18,23 @@ export class EventEmitter implements IEvents {
         this._events = new Map<EventName, Set<Subscriber>>();
     }
 
-    /**
-     * Установить обработчик на событие
-     */
-    on<T extends object>(eventName: EventName, callback: (event: T) => void) {
+    on<T extends object>(eventName: EventName, callback: Subscriber<T>) {
         if (!this._events.has(eventName)) {
             this._events.set(eventName, new Set<Subscriber>());
         }
-        this._events.get(eventName)?.add(callback);
+        this._events.get(eventName)?.add(callback as Subscriber);
     }
 
-    /**
-     * Снять обработчик с события
-     */
     off(eventName: EventName, callback: Subscriber) {
-        if (this._events.has(eventName)) {
-            this._events.get(eventName)!.delete(callback);
-            if (this._events.get(eventName)?.size === 0) {
+        const subscribers = this._events.get(eventName);
+        if (subscribers) {
+            subscribers.delete(callback);
+            if (subscribers.size === 0) {
                 this._events.delete(eventName);
             }
         }
     }
 
-    /**
-     * Инициировать событие с данными
-     */
     emit<T extends object>(eventName: string, data?: T) {
         this._events.forEach((subscribers, name) => {
             if (name instanceof RegExp && name.test(eventName) || name === eventName) {
@@ -58,23 +43,14 @@ export class EventEmitter implements IEvents {
         });
     }
 
-    /**
-     * Слушать все события
-     */
-    onAll(callback: (event: EmitterEvent) => void) {
+    onAll(callback: Subscriber<EmitterEvent>) {
         this.on("*", callback);
     }
 
-    /**
-     * Сбросить все обработчики
-     */
     offAll() {
         this._events = new Map<string, Set<Subscriber>>();
     }
 
-    /**
-     * Сделать коллбек триггер, генерирующий событие при вызове
-     */
     trigger<T extends object>(eventName: string, context?: Partial<T>) {
         return (event: object = {}) => {
             this.emit(eventName, {
@@ -84,4 +60,3 @@ export class EventEmitter implements IEvents {
         };
     }
 }
-

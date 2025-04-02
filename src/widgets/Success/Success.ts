@@ -1,35 +1,36 @@
 import { Component } from '../../shared/ui/Component/Component';
-import { IEvents } from '../../shared/utils/events';
 import { ensureElement } from '../../shared/utils/utils';
 
-interface ISuccessDetails {
-    totalAmount: number;  // Переменовано имя свойства
+interface ISuccess {
+	total: number;
 }
 
-interface IButtonActions {
-    onClick: (event: MouseEvent) => void;  
+interface ISuccessActions {
+	onClick: (event: MouseEvent) => void;
 }
 
-export class OrderSuccessMessage extends Component<ISuccessDetails> {  // Переименован класс
-    private _description: HTMLElement;  // Переменная описания
-    private _closeActionButton: HTMLButtonElement;  // Переменная кнопки
+export class Success extends Component<ISuccess> {
+	protected _total: HTMLElement;
+	protected _closeBtn: HTMLButtonElement;
 
-    constructor(container: HTMLElement, private buttonActions?: IButtonActions) {  // Убрано "protected"
-        super(container);
+	constructor(protected container: HTMLElement, actions?: ISuccessActions) {
+		super(container);
 
-        // Переименование элементов с явным описанием
-        this._description = ensureElement<HTMLElement>('.order-success__description', this.container);
-        this._closeActionButton = ensureElement<HTMLButtonElement>('.order-success__close', this.container);
+		this._total = ensureElement<HTMLElement>(
+			'.order-success__description',
+			this.container
+		);
+		this._closeBtn = ensureElement<HTMLButtonElement>(
+			'.order-success__close',
+			this.container
+		);
 
-        // Вешаем обработчик события на кнопки с обработчиком
-        if (this.buttonActions?.onClick) {
-            this._closeActionButton.addEventListener('click', this.buttonActions.onClick);
-        }
-    }
+		if (actions?.onClick) {
+			this._closeBtn.addEventListener('click', actions.onClick);
+		}
+	}
 
-    set totalAmount(amount: number) {  // Уникальный сеттер
-        this.setText(this._description, `Вы успешно потратили ${amount} синапсов`);
-    }
+	set total(value: number) {
+		this.setText(this._total, `Списано ${value} синапсов`);
+	}
 }
-
-
