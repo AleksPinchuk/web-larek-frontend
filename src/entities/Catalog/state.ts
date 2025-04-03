@@ -24,9 +24,6 @@ export class CatalogState extends Model<IAppState> {
 		this.emitChanges('items:changed', { catalog: this.catalog });
 	}
 
-
-
-
 	getTotalBasketPrice(): number {
 		let totalPrice = 0;
 		this.basket.forEach(product => {

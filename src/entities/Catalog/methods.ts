@@ -1,25 +1,11 @@
 import { Api, ApiListResponse } from '../../shared/api/api';
 import { IOrder, IProductItem } from '../../types';
-
-type TApiError = { error: string }
-
 export class Methods extends Api {
 	readonly cdn: string;
 
 	constructor(cdn: string, baseUrl: string, options?: RequestInit) {
 		super(baseUrl, options);
 		this.cdn = cdn;
-	}
-
-	getProductById(id: string) {
-		return this.get(`/product/${id}`)
-			.then((product: IProductItem) => (
-				{
-					...product,
-					image: this.cdn + product.image,
-					inBasket: false,
-				}
-			));
 	}
 
 	getAllProducts() {
