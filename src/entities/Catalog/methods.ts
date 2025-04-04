@@ -1,5 +1,6 @@
 import { Api, ApiListResponse } from '../../shared/api/api';
 import { IOrder, IProductItem } from '../../types';
+
 export class Methods extends Api {
 	readonly cdn: string;
 
@@ -22,3 +23,4 @@ export class Methods extends Api {
 		return this.post(`/order`, order).then((data: IOrder) => data);
 	}
 }
+
