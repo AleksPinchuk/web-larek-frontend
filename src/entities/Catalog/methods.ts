@@ -23,3 +23,4 @@ export class Methods extends Api {
 		return this.post(`/order`, order).then((data: IOrder) => data);
 	}
 }
+
