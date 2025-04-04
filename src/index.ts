@@ -5,11 +5,11 @@ import { Methods, CatalogState, CatalogChangeEvent } from './entities/Catalog';
 import { EventEmitter } from './shared/utils/events';
 import { Catalog } from './pages/Catalog';
 import { Modal } from './shared/ui/Modal/Modal';
+import { Form } from './shared/ui/Form/Form';
 import { ProductCard } from './pages/Catalog/ui/ProductCard/ProductCard';
-import { IOrderForm, IProductItem } from './types';
+import { IOrderForm, IProductItem, IOrderContacts } from './types';
 import { Basket } from './widgets/Basket/Basket';
 import { OrderFormAddress } from './widgets/OrderFormAddress/OrderFormAddress';
-import { OrderFormContacts } from './widgets/OrderFormContacts/OrderFormContacts';
 import { Success } from './widgets/Success/Success';
 
 const events = new EventEmitter();
@@ -33,7 +33,7 @@ const orderAddress = new OrderFormAddress(
 	cloneTemplate(orderAddressTemplate),
 	events
 );
-const orderContacts = new OrderFormContacts(
+const orderContacts = new Form<IOrderContacts>(
 	cloneTemplate(orderContactsTemplate),
 	events
 );
