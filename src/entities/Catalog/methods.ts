@@ -1,5 +1,6 @@
 import { Api, ApiListResponse } from '../../shared/api/api';
 import { IOrder, IProductItem } from '../../types';
+
 export class Methods extends Api {
 	readonly cdn: string;
 
