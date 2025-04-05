@@ -2,35 +2,35 @@ import { Component } from '../../shared/ui/Component/Component';
 import { ensureElement } from '../../shared/utils/utils';
 
 interface ISuccess {
-	total: number;
+    total: number;
 }
 
 interface ISuccessActions {
-	onClick: (event: MouseEvent) => void;
+    onClick: (event: MouseEvent) => void;
 }
 
 export class Success extends Component<ISuccess> {
-	protected _total: HTMLElement;
-	protected _closeBtn: HTMLButtonElement;
+    protected _total: HTMLElement;
+    protected _closeBtn: HTMLButtonElement;
 
-	constructor(protected container: HTMLElement, actions?: ISuccessActions) {
-		super(container);
+    constructor(protected container: HTMLElement, actions?: ISuccessActions) {
+        super(container);
+        this.initializeElements();
+        this.initializeCloseButton(actions);
+    }
 
-		this._total = ensureElement<HTMLElement>(
-			'.order-success__description',
-			this.container
-		);
-		this._closeBtn = ensureElement<HTMLButtonElement>(
-			'.order-success__close',
-			this.container
-		);
+    private initializeElements() {
+        this._total = ensureElement<HTMLElement>('.order-success__description', this.container);
+        this._closeBtn = ensureElement<HTMLButtonElement>('.order-success__close', this.container);
+    }
 
-		if (actions?.onClick) {
-			this._closeBtn.addEventListener('click', actions.onClick);
-		}
-	}
+    private initializeCloseButton(actions?: ISuccessActions) {
+        if (actions?.onClick) {
+            this._closeBtn.addEventListener('click', actions.onClick);
+        }
+    }
 
-	set total(value: number) {
-		this.setText(this._total, `Списано ${value} синапсов`);
-	}
+    set total(value: number) {
+        this.setText(this._total, `Списано ${value} синапсов`);
+    }
 }
