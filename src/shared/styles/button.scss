@@ -17,4 +17,12 @@
     @include mixins.button(white, $primaryLight, $primaryLight);
     border: $hoverBorder;
   }
+
+  &:disabled {
+    background-color: $disabled;
+    cursor: not-allowed;
+    &:hover {
+      background-color: $disabled;
+    }
+  }
 }

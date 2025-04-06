@@ -1,0 +1,14 @@
+@use "variables" as *;
+
+.error {
+    padding: 20px;
+    background-color: $error;
+    border-radius: 4px;
+    margin: 20px 0;
+
+    &__text {
+        color: white;
+        margin: 0;
+        text-align: center;
+    }
+} 

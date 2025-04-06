@@ -1,5 +1,5 @@
 import { Api, ApiListResponse } from '../../shared/api/api';
-import { IOrder, IProductItem } from '../../types';
+import { IOrder, IProductItem, IOrderData } from '../../types';
 
 export class Methods extends Api {
     readonly cdn: string;
@@ -14,7 +14,7 @@ export class Methods extends Api {
             .then(this.processProductResponse.bind(this));
     }
 
-    createOrder(order: IOrder): Promise<IOrder> {
+    createOrder(order: IOrderData): Promise<IOrder> {
         return this.post('/order', order)
             .then(data => data as IOrder); 
     }

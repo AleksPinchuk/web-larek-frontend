@@ -21,7 +21,9 @@ export interface IOrderContacts {
 
 export interface IOrderForm extends IOrderAddress, IOrderContacts {}
 
-export interface IOrder extends IOrderForm {
+export interface IOrder extends IOrderForm {}
+
+export interface IOrderData extends IOrder {
 	items: string[];
 	total: number;
 }

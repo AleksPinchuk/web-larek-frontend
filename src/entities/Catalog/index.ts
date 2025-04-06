@@ -1,2 +1,4 @@
 export * from './methods';
-export * from './state';
+export * from './CatalogState';
+export * from './BasketState';
+export * from './OrderState';

@@ -32,4 +32,15 @@ export class OrderFormAddress extends Form<IOrderAddress> {
             button.classList.remove(className);
         }
     }
+
+    render(state: Partial<IOrderAddress> & { valid: boolean; errors: string[] }) {
+        const result = super.render(state);
+        // Сбрасываем активное состояние кнопок если payment пустой
+        if (!state.payment) {
+            this._paymentButtons.forEach((button) => {
+                this.toggleButtonClass(button, 'button_alt-active', false);
+            });
+        }
+        return result;
+    }
 }
